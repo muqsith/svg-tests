@@ -1,6 +1,7 @@
 const path = require('path'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
-    ExtractTextPlugin = require('extract-text-webpack-plugin')
+    ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    CopyWebpackPlugin = require('copy-webpack-plugin')
     ;
 
 const config = {
@@ -10,13 +11,15 @@ const config = {
         filename: '[name].js'
     },
     module: {
-        rules: [{
-            test: /\.css$/,
-            use: ExtractTextPlugin.extract({
-                fallback: "style-loader",
-                use: ['css-loader', 'postcss-loader']
-            })
-        }]
+        rules: [
+            {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: ['css-loader', 'postcss-loader']
+                })
+            }
+        ]
     },
     devServer: {
         contentBase: path.join(__dirname, "public"),
@@ -27,7 +30,8 @@ const config = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'src', 'index.html')
         }),
-        new ExtractTextPlugin('main.css')
+        new ExtractTextPlugin('main.css'),
+        new CopyWebpackPlugin([{ from: 'src/svg', to: 'svg/' }])
     ]
 }
 
